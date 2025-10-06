@@ -17,7 +17,7 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public List<QueryTypeResponse> query() {
+    public List<QueryTypeResponse> getAll() {
 
         return repository.findAll().stream()
                 .map(type -> new QueryTypeResponse(type.getId(), type.getDescription()))
