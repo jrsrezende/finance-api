@@ -16,11 +16,14 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/finance_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 12345
-      SPRING_DATA_MONGODB_URI: mongodb://mongodb:12345@mongodb:27017/finance_db?authSource=finance_db
+
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:12345@mongodb:27017/finance_db?authSource=admin
+
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: admin
       SPRING_RABBITMQ_PASSWORD: admin
+
       SPRING_MAIL_HOST: mailhog
       SPRING_MAIL_PORT: 1025
 
