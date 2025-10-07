@@ -17,8 +17,8 @@ public class ResourceNotFoundExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleEmailAlreadyRegisteredException(ResourceNotFoundException e){
 
         Map<String, Object> body = new HashMap<>();
-        body.put("status", HttpStatus.NOT_FOUND.value());
         body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.NOT_FOUND.value());
         body.put("message", e.getMessage());
 
         return ResponseEntity.status(404).body(body);

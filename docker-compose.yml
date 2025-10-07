@@ -1,17 +1,50 @@
-version: '3.8'
-
 services:
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"   # Porta padrão para conexões AMQP
-      - "15672:15672" # Porta para a interface web de gerenciamento
+      - "5672:5672"    # Porta padrão AMQP
+      - "15672:15672"  # Interface web de gerenciamento
     environment:
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
     volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq
 
+  postgres:
+    image: postgres:15
+    container_name: postgres-finance
+    environment:
+      POSTGRES_DB: finance_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb-finance
+    environment:
+      MONGO_INITDB_DATABASE: finance_db
+      MONGO_INITDB_ROOT_USERNAME: mongodb
+      MONGO_INITDB_ROOT_PASSWORD: 12345
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+
+# Volumes nomeados
 volumes:
-  rabbitmq-data:
+  rabbitmq_data:
+  postgres_data:
+  mongo_data:

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FilterConfig {
 
-    @Value("${jwt_key}")
+    @Value("${jwt.key}")
     private String jwtKey;
 
     @Bean
