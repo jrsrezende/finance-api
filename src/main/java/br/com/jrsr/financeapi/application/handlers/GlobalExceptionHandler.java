@@ -1,5 +1,6 @@
 package br.com.jrsr.financeapi.application.handlers;
 
+import br.com.jrsr.financeapi.application.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,17 +14,15 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGlobalException(Exception e) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleEmailAlreadyRegisteredException(ResourceNotFoundException e){
 
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        body.put("status", HttpStatus.NOT_FOUND.value());
         body.put("message", e.getMessage());
 
-        e.printStackTrace();
-
-        return ResponseEntity.status(500).body(body);
+        return ResponseEntity.status(404).body(body);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
