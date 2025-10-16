@@ -1,4 +1,4 @@
-package br.com.jrsr.financeapi.infrastructure.runners;
+package br.com.jrsr.financeapi.infrastructure.startup;
 
 import br.com.jrsr.financeapi.domain.entities.Type;
 import br.com.jrsr.financeapi.infrastructure.repositories.TypeRepository;
@@ -19,9 +19,9 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args){
-        List<String> tranactionsTypes = List.of("Expense", "Income", "Investment");
+        List<String> transactionsTypes = List.of("Expense", "Income", "Investment");
 
-        tranactionsTypes.stream().filter(description -> repository.findByDescription(description).isEmpty())
+        transactionsTypes.stream().filter(description -> repository.findByDescription(description).isEmpty())
                 .map(description -> new Type(null, description))
                 .forEach(repository::save);
     }
