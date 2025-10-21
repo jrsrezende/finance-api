@@ -3,20 +3,28 @@ package br.com.jrsr.financeapi.infrastructure.components;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.Date;
 
 @Component
+@RequestScope
+// Por padrão, beans @Component são singleton, então dados armazenados neles poderiam ser compartilhados entre requisições.
+// Usando @RequestScope, cada requisição recebe uma instância própria do UserContext, garantindo que claimsCache pertença apenas àquela requisição.
 public class UserContext {
 
     private final HttpServletRequest request;
+    private Claims claimsCache;
 
     public UserContext(HttpServletRequest request) {
         this.request = request;
     }
 
     private Claims getClaims() {
-        return (Claims) request.getAttribute("claims");
+        if (claimsCache == null) {
+            claimsCache = (Claims) request.getAttribute("claims");
+        }
+        return claimsCache;
     }
 
     public String getUserEmail() {
