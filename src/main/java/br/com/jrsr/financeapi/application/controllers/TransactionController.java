@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/transactions")
+@RequestMapping("/api/v1/transaction")
 @Tag(name = "Transactions", description = "Operations related to financial transactions")
 public class TransactionController {
 
