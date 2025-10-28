@@ -36,31 +36,27 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionResponse create(CreateTransactionRequest request) {
 
         Transaction transaction = new Transaction();
-        transaction.setName(request.name());
-        transaction.setValue(BigDecimal.valueOf(request.value()));
-        Type type = typeRepository.findById(request.typeId()).orElseThrow(() -> new ResourceNotFoundException("Type does not exist"));
-        transaction.setType(type);
-
-        transactionRepository.save(transaction);
-
-        TypeResponse typeResponse = new TypeResponse(type.getId(), type.getDescription());
-
-        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
+        return getTransactionResponse(transaction, request.name(), request.value(), request.typeId());
     }
 
+    @Override
     public TransactionResponse update(UpdateTransactionRequest request, UUID id) {
 
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Transaction does not exist"));
-        transaction.setName(request.name());
-        transaction.setValue(BigDecimal.valueOf(request.value()));
-        Type type = typeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Type does not exist"));
+        return getTransactionResponse(transaction, request.name(), request.value(), request.typeId());
+    }
+
+    private TransactionResponse getTransactionResponse(Transaction transaction, String name, Double value, UUID uuid) {
+        transaction.setName(name);
+        transaction.setValue(BigDecimal.valueOf(value));
+        Type type = typeRepository.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("Type does not exist"));
         transaction.setType(type);
 
         transactionRepository.save(transaction);
 
         TypeResponse typeResponse = new TypeResponse(type.getId(), type.getDescription());
 
-        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
+        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate(), transaction.getValue(), typeResponse);
     }
 
     @Override
@@ -71,7 +67,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         TypeResponse typeResponse = new TypeResponse(transaction.getType().getId(), transaction.getType().getDescription());
 
-        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
+        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate(), transaction.getValue(), typeResponse);
     }
 
     @Override
@@ -80,7 +76,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         TypeResponse typeResponse = new TypeResponse(transaction.getType().getId(), transaction.getType().getDescription());
 
-        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
+        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate(), transaction.getValue(), typeResponse);
     }
 
     @Override
@@ -91,7 +87,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         Page<Transaction> transactions = transactionRepository.findByDateBetweenOrderByDateDesc(from, to, pageable);
 
-        return transactions.map(t -> new TransactionResponse(t.getId(),t.getName(), t.getDate().toString(), t.getValue().doubleValue(),
+        return transactions.map(t -> new TransactionResponse(t.getId(),t.getName(), t.getDate(), t.getValue(),
                 new TypeResponse(t.getType().getId(), t.getType().getDescription())));
     }
 }
