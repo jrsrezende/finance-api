@@ -2,8 +2,8 @@ package br.com.jrsr.financeapi.application.services.impl;
 
 import br.com.jrsr.financeapi.application.dto.request.CreateTransactionRequest;
 import br.com.jrsr.financeapi.application.dto.request.UpdateTransactionRequest;
-import br.com.jrsr.financeapi.application.dto.response.QueryTransactionResponse;
-import br.com.jrsr.financeapi.application.dto.response.QueryTypeResponse;
+import br.com.jrsr.financeapi.application.dto.response.TransactionResponse;
+import br.com.jrsr.financeapi.application.dto.response.TypeResponse;
 import br.com.jrsr.financeapi.application.exceptions.ResourceNotFoundException;
 import br.com.jrsr.financeapi.application.services.TransactionService;
 import br.com.jrsr.financeapi.domain.entities.Transaction;
@@ -33,7 +33,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public QueryTransactionResponse create(CreateTransactionRequest request) {
+    public TransactionResponse create(CreateTransactionRequest request) {
 
         Transaction transaction = new Transaction();
         transaction.setName(request.name());
@@ -43,12 +43,12 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactionRepository.save(transaction);
 
-        QueryTypeResponse typeResponse = new QueryTypeResponse(type.getId(), type.getDescription());
+        TypeResponse typeResponse = new TypeResponse(type.getId(), type.getDescription());
 
-        return new QueryTransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
+        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
     }
 
-    public QueryTransactionResponse update(UpdateTransactionRequest request, UUID id) {
+    public TransactionResponse update(UpdateTransactionRequest request, UUID id) {
 
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Transaction does not exist"));
         transaction.setName(request.name());
@@ -58,40 +58,40 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactionRepository.save(transaction);
 
-        QueryTypeResponse typeResponse = new QueryTypeResponse(type.getId(), type.getDescription());
+        TypeResponse typeResponse = new TypeResponse(type.getId(), type.getDescription());
 
-        return new QueryTransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
+        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
     }
 
     @Override
-    public QueryTransactionResponse delete(UUID id) {
+    public TransactionResponse delete(UUID id) {
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Transaction does not exist"));
 
         transactionRepository.delete(transaction);
 
-        QueryTypeResponse typeResponse = new QueryTypeResponse(transaction.getType().getId(), transaction.getType().getDescription());
+        TypeResponse typeResponse = new TypeResponse(transaction.getType().getId(), transaction.getType().getDescription());
 
-        return new QueryTransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
+        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
     }
 
     @Override
-    public QueryTransactionResponse getByID(UUID id) {
+    public TransactionResponse getByID(UUID id) {
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Transaction does not exist"));
 
-        QueryTypeResponse typeResponse = new QueryTypeResponse(transaction.getType().getId(), transaction.getType().getDescription());
+        TypeResponse typeResponse = new TypeResponse(transaction.getType().getId(), transaction.getType().getDescription());
 
-        return new QueryTransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
+        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate().toString(), transaction.getValue().doubleValue(), typeResponse);
     }
 
     @Override
-    public Page<QueryTransactionResponse> getTransactions(LocalDate from, LocalDate to, int page) {
+    public Page<TransactionResponse> getTransactions(LocalDate from, LocalDate to, int page) {
 
         //Criando a regra de paginação, máximo 25 registros por página
         Pageable pageable = PageRequest.of(page, 25);
 
         Page<Transaction> transactions = transactionRepository.findByDateBetweenOrderByDateDesc(from, to, pageable);
 
-        return transactions.map(t -> new QueryTransactionResponse(t.getId(),t.getName(), t.getDate().toString(), t.getValue().doubleValue(),
-                new QueryTypeResponse(t.getType().getId(), t.getType().getDescription())));
+        return transactions.map(t -> new TransactionResponse(t.getId(),t.getName(), t.getDate().toString(), t.getValue().doubleValue(),
+                new TypeResponse(t.getType().getId(), t.getType().getDescription())));
     }
 }

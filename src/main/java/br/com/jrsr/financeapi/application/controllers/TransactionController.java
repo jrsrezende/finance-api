@@ -2,7 +2,7 @@ package br.com.jrsr.financeapi.application.controllers;
 
 import br.com.jrsr.financeapi.application.dto.request.CreateTransactionRequest;
 import br.com.jrsr.financeapi.application.dto.request.UpdateTransactionRequest;
-import br.com.jrsr.financeapi.application.dto.response.QueryTransactionResponse;
+import br.com.jrsr.financeapi.application.dto.response.TransactionResponse;
 import br.com.jrsr.financeapi.application.services.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,9 +34,9 @@ public class TransactionController {
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
     @PostMapping
-    public ResponseEntity<QueryTransactionResponse> createTransaction(
+    public ResponseEntity<TransactionResponse> createTransaction(
             @RequestBody @Valid CreateTransactionRequest request) {
-        QueryTransactionResponse response = service.create(request);
+        TransactionResponse response = service.create(request);
         return ResponseEntity.status(201).body(response);
     }
 
@@ -47,10 +47,10 @@ public class TransactionController {
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<QueryTransactionResponse> updateTransaction(
+    public ResponseEntity<TransactionResponse> updateTransaction(
             @RequestBody @Valid UpdateTransactionRequest request,
             @Parameter(description = "ID of the transaction to update") @PathVariable UUID id) {
-        QueryTransactionResponse response = service.update(request, id);
+        TransactionResponse response = service.update(request, id);
         return ResponseEntity.status(200).body(response);
     }
 
@@ -60,9 +60,9 @@ public class TransactionController {
             @ApiResponse(responseCode = "404", description = "Transaction not found")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<QueryTransactionResponse> deleteTransaction(
+    public ResponseEntity<TransactionResponse> deleteTransaction(
             @Parameter(description = "ID of the transaction to delete") @PathVariable UUID id) {
-        QueryTransactionResponse response = service.delete(id);
+        TransactionResponse response = service.delete(id);
         return ResponseEntity.status(200).body(response);
     }
 
@@ -72,9 +72,9 @@ public class TransactionController {
             @ApiResponse(responseCode = "404", description = "Transaction not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<QueryTransactionResponse> getTransactionById(
+    public ResponseEntity<TransactionResponse> getTransactionById(
             @Parameter(description = "ID of the transaction to retrieve") @PathVariable UUID id) {
-        QueryTransactionResponse response = service.getByID(id);
+        TransactionResponse response = service.getByID(id);
         return ResponseEntity.status(200).body(response);
     }
 
@@ -83,11 +83,11 @@ public class TransactionController {
             @ApiResponse(responseCode = "200", description = "List of transactions returned successfully"),
     })
     @GetMapping("{from}/{to}/{page}")
-    public ResponseEntity<Page<QueryTransactionResponse>> getTransactions(
+    public ResponseEntity<Page<TransactionResponse>> getTransactions(
             @Parameter(description = "Start date (yyyy-MM-dd)") @PathVariable LocalDate from,
             @Parameter(description = "End date (yyyy-MM-dd)") @PathVariable LocalDate to,
             @Parameter(description = "Page number (0-based)") @PathVariable int page) {
-        Page<QueryTransactionResponse> responses = service.getTransactions(from, to, page);
+        Page<TransactionResponse> responses = service.getTransactions(from, to, page);
         return ResponseEntity.status(200).body(responses);
     }
 }

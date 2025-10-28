@@ -1,6 +1,6 @@
 package br.com.jrsr.financeapi.application.controllers;
 
-import br.com.jrsr.financeapi.application.dto.response.QueryTypeResponse;
+import br.com.jrsr.financeapi.application.dto.response.TypeResponse;
 import br.com.jrsr.financeapi.application.services.TypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,8 +29,8 @@ public class TypeController {
             @ApiResponse(responseCode = "200", description = "List of transaction types retrieved successfully"),
     })
     @GetMapping
-    public ResponseEntity<List<QueryTypeResponse>> queryAll() {
-        List<QueryTypeResponse> list = service.getAll();
+    public ResponseEntity<List<TypeResponse>> queryAll() {
+        List<TypeResponse> list = service.getAll();
         return ResponseEntity.ok().body(list);
     }
 }

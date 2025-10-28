@@ -28,7 +28,7 @@ public class FinancesController {
     @PostMapping("analysis")
     public ResponseEntity<String> processAnalysis(@RequestBody @Valid FinanceAnalysisRequest request) throws Exception {
 
-        var jsonRequest = mapper.writeValueAsString(request); // Convertendo o objeto request para JSON
+        String jsonRequest = mapper.writeValueAsString(request);
 
         rabbitTemplate.convertAndSend("finance.queue", jsonRequest);// Enviando a mensagem para a fila "finance.queue"
 
