@@ -60,14 +60,12 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionResponse delete(UUID id) {
+    public String delete(UUID id) {
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Transaction does not exist"));
 
         transactionRepository.delete(transaction);
 
-        TypeResponse typeResponse = new TypeResponse(transaction.getType().getId(), transaction.getType().getDescription());
-
-        return new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getDate(), transaction.getValue(), typeResponse);
+        return "Transaction successfully deleted.";
     }
 
     @Override

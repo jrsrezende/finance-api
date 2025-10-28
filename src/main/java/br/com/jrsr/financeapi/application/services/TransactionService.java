@@ -14,7 +14,7 @@ public interface TransactionService {
 
     TransactionResponse update(UpdateTransactionRequest request, UUID id);
 
-    TransactionResponse delete(UUID id);
+    String delete(UUID id);
 
     TransactionResponse getByID(UUID id);
 

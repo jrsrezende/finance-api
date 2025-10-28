@@ -60,9 +60,9 @@ public class TransactionController {
             @ApiResponse(responseCode = "404", description = "Transaction not found")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<TransactionResponse> deleteTransaction(
+    public ResponseEntity<String> deleteTransaction(
             @Parameter(description = "ID of the transaction to delete") @PathVariable UUID id) {
-        TransactionResponse response = service.delete(id);
+        String response = service.delete(id);
         return ResponseEntity.status(200).body(response);
     }
 
