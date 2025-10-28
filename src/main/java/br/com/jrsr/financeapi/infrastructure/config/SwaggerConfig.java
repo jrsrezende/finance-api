@@ -23,7 +23,7 @@ public class SwaggerConfig {
                         .description("API for finance management")
                         .contact(new Contact()
                                 .name("João Rezende")
-                                .email("joao@example.com")
+                                .email("joaoricardorezende@gmail.com")
                         ))
                 .components(new Components().addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()

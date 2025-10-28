@@ -7,7 +7,6 @@ import br.com.jrsr.financeapi.application.services.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -18,7 +17,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/transaction")
+@RequestMapping("/api/v1/transactions")
 @Tag(name = "Transactions", description = "Operations related to financial transactions")
 public class TransactionController {
 
@@ -29,48 +28,36 @@ public class TransactionController {
     }
 
     @Operation(summary = "Create a new transaction")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Transaction created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
-    })
+    @ApiResponse(responseCode = "201", description = "Transaction created successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid request")
     @PostMapping
-    public ResponseEntity<TransactionResponse> createTransaction(
-            @RequestBody @Valid CreateTransactionRequest request) {
+    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody @Valid CreateTransactionRequest request) {
         TransactionResponse response = service.create(request);
         return ResponseEntity.status(201).body(response);
     }
 
     @Operation(summary = "Update an existing transaction by ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Transaction updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Transaction not found"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
-    })
+    @ApiResponse(responseCode = "200", description = "Transaction updated successfully")
+    @ApiResponse(responseCode = "404", description = "Transaction not found")
+    @ApiResponse(responseCode = "400", description = "Invalid request")
     @PutMapping("/{id}")
-    public ResponseEntity<TransactionResponse> updateTransaction(
-            @RequestBody @Valid UpdateTransactionRequest request,
-            @Parameter(description = "ID of the transaction to update") @PathVariable UUID id) {
+    public ResponseEntity<TransactionResponse> updateTransaction(@RequestBody @Valid UpdateTransactionRequest request, @PathVariable UUID id) {
         TransactionResponse response = service.update(request, id);
         return ResponseEntity.status(200).body(response);
     }
 
     @Operation(summary = "Delete a transaction by ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Transaction deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Transaction not found")
-    })
+    @ApiResponse(responseCode = "200", description = "Transaction deleted successfully")
+    @ApiResponse(responseCode = "404", description = "Transaction not found")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTransaction(
-            @Parameter(description = "ID of the transaction to delete") @PathVariable UUID id) {
+    public ResponseEntity<String> deleteTransaction(@PathVariable UUID id) {
         String response = service.delete(id);
         return ResponseEntity.status(200).body(response);
     }
 
     @Operation(summary = "Get a transaction by ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Transaction found"),
-            @ApiResponse(responseCode = "404", description = "Transaction not found")
-    })
+    @ApiResponse(responseCode = "200", description = "Transaction found")
+    @ApiResponse(responseCode = "404", description = "Transaction not found")
     @GetMapping("/{id}")
     public ResponseEntity<TransactionResponse> getTransactionById(
             @Parameter(description = "ID of the transaction to retrieve") @PathVariable UUID id) {
@@ -79,14 +66,9 @@ public class TransactionController {
     }
 
     @Operation(summary = "List transactions within a date range, paginated")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of transactions returned successfully"),
-    })
+    @ApiResponse(responseCode = "200", description = "List of transactions returned successfully")
     @GetMapping("{from}/{to}/{page}")
-    public ResponseEntity<Page<TransactionResponse>> getTransactions(
-            @Parameter(description = "Start date (yyyy-MM-dd)") @PathVariable LocalDate from,
-            @Parameter(description = "End date (yyyy-MM-dd)") @PathVariable LocalDate to,
-            @Parameter(description = "Page number (0-based)") @PathVariable int page) {
+    public ResponseEntity<Page<TransactionResponse>> getTransactions(@PathVariable LocalDate from, @PathVariable LocalDate to, @PathVariable int page) {
         Page<TransactionResponse> responses = service.getTransactions(from, to, page);
         return ResponseEntity.status(200).body(responses);
     }

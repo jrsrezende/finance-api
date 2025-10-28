@@ -4,7 +4,6 @@ import br.com.jrsr.financeapi.application.dto.response.TypeResponse;
 import br.com.jrsr.financeapi.application.services.TypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/type")
+@RequestMapping("/api/v1/types")
 @Tag(name = "Types", description = "Operations related to transaction types")
 public class TypeController {
 
@@ -25,9 +24,7 @@ public class TypeController {
     }
 
     @Operation(summary = "Retrieve all transaction types")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of transaction types retrieved successfully"),
-    })
+    @ApiResponse(responseCode = "200", description = "List of transaction types retrieved successfully")
     @GetMapping
     public ResponseEntity<List<TypeResponse>> queryAll() {
         List<TypeResponse> list = service.getAll();
